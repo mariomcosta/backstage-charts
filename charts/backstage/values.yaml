@@ -76,6 +76,27 @@ ingress:
     # -- The name to which the TLS Secret will be called
     secretName: ""
 
+# https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+horizontalPodAutoscaler:
+  # -- Enable the creation of the ingress resource
+  enabled: true
+  # -- Minimum amount of replicas for horizontalPodAutoscaler resource
+  minReplicas: 2
+  # -- Maximum amount of replicas for horizontalPodAutoscaler resource
+  maxReplicas: 5
+  # -- The target before triggering horizontalPodAutoscaler scaling policy
+  targetCPUUtilizationPercentage: 80
+  # -- Describes horizontalPodAutoscaler about scale policies and rules
+  behavior: {}
+    # scaleUp:
+    # stabilizationWindowSeconds: 300
+    # policies:
+    # - type: Pods
+    #   value: 1
+    #   periodSeconds: 60
+    # scaleDown:
+    #   stabilizationWindowSeconds: 300
+
 # -- Backstage parameters
 # @default -- See below
 backstage:
@@ -254,37 +275,18 @@ backstage:
   #           values:
   #           - backstage
   #       topologyKey: "kubernetes.io/hostname"
-    # podAffinity:
-    #   preferredDuringSchedulingIgnoredDuringExecution:
-    #    - weight: 50
-    #      podAffinityTerm:
-    #        labelSelector:
-    #          matchExpressions:
-    #          - key: app
-    #            operator: In
-    #            values:
-    #              - backstage
-    #        topologyKey: "kubernetes.io/hostname"
+  # podAffinity:
+  #   preferredDuringSchedulingIgnoredDuringExecution:
+  #    - weight: 50
+  #      podAffinityTerm:
+  #        labelSelector:
+  #          matchExpressions:
+  #          - key: app
+  #            operator: In
+  #            values:
+  #              - backstage
+  #        topologyKey: "kubernetes.io/hostname"
 
-  # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  autoscaling:
-    enabled: true
-    minReplicas: 2
-    maxReplicas: 5
-    targetCPUUtilizationPercentage: 80
-    behavior: {}
-  #    scaleUp:
-  #     stabilizationWindowSeconds: 300
-  #     policies:
-  #     - type: Pods
-  #       value: 1
-  #       periodSeconds: 60
-  #    scaleDown:
-  #     stabilizationWindowSeconds: 300
-  #     policies:
-  #     - type: Pods
-  #       value: 1
-  #       periodSeconds: 180
   # -- Annotations to add to the backend deployment pods
   podAnnotations: {}
 

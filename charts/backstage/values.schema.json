@@ -5016,6 +5016,30 @@
                     },
                     "title": "Node tolerations for server scheduling to nodes with taints",
                     "type": "array"
+                },
+                "affinity": {
+                    "default": [],
+                    "description": "Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity/",
+                    "items": {
+                        "description": "Affinity is a group of affinity scheduling rules.",
+                        "properties": {
+                            "nodeAffinity": {
+                                "description": "Describes node affinity scheduling rules for the pod.",
+                                "type": "object"
+                            },
+                            "podAffinity": {
+                                "description": "Describes pod affinity scheduling rules (e.g. co-locate this pod in the same node, zone, etc. as some other pod(s)).",
+                                "type": "object"
+                            },
+                            "podAntiAffinity": {
+                                "description": "Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s)).",
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "title": "Pod scheduling preferences (by default keep pods within a release on separate nodes)",
+                    "type": "object"
                 }
             },
             "title": "Backstage parameters",
@@ -5115,6 +5139,39 @@
                 }
             },
             "title": "Global parameters.",
+            "type": "object"
+        },
+        "horizontalPodAutoscaler": {
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "default": false,
+                    "title": "Enable the creation of the ingress resource",
+                    "type": "boolean"
+                },
+                "minReplicas": {
+                    "title": "Minimum amount of replicas for horizontalPodAutoscaler resource",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 1
+                },
+                "maxReplicas": {
+                    "title": "Maximum amount of replicas for horizontalPodAutoscaler resource",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "targetCPUUtilizationPercentage": {
+                    "title": "The target before triggering horizontalPodAutoscaler scaling policy",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "behavior": {
+                    "title": "Describes horizontalPodAutoscaler about scale policies and rules",
+                    "type": "object",
+                    "default": {}
+                }
+            },
+            "title": "horizontalPodAutoscaler parameters",
             "type": "object"
         },
         "ingress": {

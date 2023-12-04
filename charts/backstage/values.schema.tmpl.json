@@ -109,6 +109,39 @@
                 }
             }
         },
+        "horizontalPodAutoscaler": {
+            "title": "horizontalPodAutoscaler parameters",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "title": "Enable the creation of the horizontalPodAutoscaler resource",
+                    "type": "boolean",
+                    "default": false
+                },
+                "minReplicas": {
+                    "title": "Minimum replicas for horizontalPodAutoscaler resource",
+                    "type": "integer",
+                    "minimum": 0,
+                    "default": 1
+                },
+                "maxReplicas": {
+                    "title": "Maximum replicas for horizontalPodAutoscaler resource",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "targetCPUUtilizationPercentage": {
+                    "title": "The target before triggering horizontalPodAutoscaler scaling policy",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "behavior": {
+                    "title": "Describes horizontalPodAutoscaler about scale policies and rules",
+                    "type": "object",
+                    "default": {}
+                }
+            }
+        },
         "ingress": {
             "title": "Ingress parameters",
             "type": "object",
@@ -484,6 +517,15 @@
                     "type": "array",
                     "items": {
                         "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.core.v1.Toleration"
+                    },
+                    "default": []
+                },
+                "affinity": {
+                    "title": "Pod scheduling preferences (by default keep pods within a release on separate nodes)",
+                    "description": "Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity/",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master/_definitions.json#/definitions/io.k8s.api.core.v1.Affinity"
                     },
                     "default": []
                 },
