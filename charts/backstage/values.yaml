@@ -240,6 +240,51 @@ backstage:
   #    value: "value"
   #    effect: "NoSchedule|PreferNoSchedule|NoExecute"
 
+  ## Pod scheduling preferences (by default keep pods within a release on separate nodes).
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## By default we don't set affinity
+  affinity: {}
+  # affinity:
+  #   podAntiAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #     - labelSelector:
+  #         matchExpressions:
+  #         - key: app
+  #           operator: In
+  #           values:
+  #           - backstage
+  #       topologyKey: "kubernetes.io/hostname"
+    # podAffinity:
+    #   preferredDuringSchedulingIgnoredDuringExecution:
+    #    - weight: 50
+    #      podAffinityTerm:
+    #        labelSelector:
+    #          matchExpressions:
+    #          - key: app
+    #            operator: In
+    #            values:
+    #              - backstage
+    #        topologyKey: "kubernetes.io/hostname"
+
+  # https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+    behavior: {}
+  #    scaleUp:
+  #     stabilizationWindowSeconds: 300
+  #     policies:
+  #     - type: Pods
+  #       value: 1
+  #       periodSeconds: 60
+  #    scaleDown:
+  #     stabilizationWindowSeconds: 300
+  #     policies:
+  #     - type: Pods
+  #       value: 1
+  #       periodSeconds: 180
   # -- Annotations to add to the backend deployment pods
   podAnnotations: {}
 
