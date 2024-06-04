@@ -1,0 +1,50 @@
+{{- if .Values.horizontalPodAutoscaler.enabled }}
+{{- if .Capabilities.APIVersions.Has "autoscaling/v2" }}
+apiVersion: autoscaling/v2
+{{- else }}
+apiVersion: autoscaling/v2beta2
+{{- end }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  labels: {{ include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: backstage
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.backstage.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.backstage.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: deployment
+    name: {{ include "common.names.fullname" . }}
+  minReplicas: {{ .Values.horizontalPodAutoscaler.minReplicas }}
+  maxReplicas: {{ .Values.horizontalPodAutoscaler.maxReplicas }}
+  {{- with .Values.horizontalPodAutoscaler.behavior }}
+  behavior:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  metrics:
+  {{- if .Values.horizontalPodAutoscaler.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.horizontalPodAutoscaler.targetCPUUtilizationPercentage }}
+  {{- end }}
+  {{- if .Values.horizontalPodAutoscaler.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.horizontalPodAutoscaler.targetMemoryUtilizationPercentage }}
+  {{- end }}
+{{- end }}
